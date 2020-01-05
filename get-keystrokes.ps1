@@ -1,4 +1,4 @@
-function Get-Keystrokes -Timeout 10 -PassThru {
+function Get-Keystrokes -Timeout 10 {
 <#
 .SYNOPSIS
     Logs keys pressed, time and the active window.
