@@ -255,6 +255,7 @@ function Old-Guard {
             
             $Sender.Stop()
         } | Out-Null
+        }
     }
 
 }
