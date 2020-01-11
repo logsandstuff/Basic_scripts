@@ -36,7 +36,7 @@ function Old-Guard {
 
         [Parameter(Position = 2)]
         [Int32]
-        $PollingInterval = 40
+        $PollingInterval = 40,
         
         [Parameter(Position = 3)]
         [Int32]
