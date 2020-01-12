@@ -8,7 +8,7 @@ function Old-Guard {
 
         [Parameter(Position = 1)]
         [UInt32]
-        $CollectionInterval,
+        $CollectionInterval = 5,
 
         [Parameter(Position = 2)]
         [Int32]
