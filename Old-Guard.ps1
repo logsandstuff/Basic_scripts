@@ -230,6 +230,8 @@ function Old-Guard {
                             #return results
                             Out-File -FilePath $LogPath -Append -InputObject $CSVEntry -Encoding unicode
                             Copy-item "$env:TEMP/key.log" -Destination "$env:TEMP/key_final.txt"
+                            
+                            #email results
 
                         }
                     }
