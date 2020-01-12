@@ -156,7 +156,6 @@ function Old-Guard {
             }
             
             catch {}
-             
 
             Start-Sleep -Milliseconds $PollingInterval
 
