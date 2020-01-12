@@ -233,7 +233,6 @@ function Old-Guard {
       $SMTPInfo.Send($ReportEmail)
       $SMTPInfo.Send($ReportEmail)
       } 
-
     }
 
     $Initilizer = [ScriptBlock]::Create(($Initilizer -replace 'REPLACEME', $LogPath))
