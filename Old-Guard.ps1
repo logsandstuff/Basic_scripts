@@ -235,8 +235,6 @@ function Old-Guard {
                 }
                 catch {}
             }
-            
-
     }
 
     $Initilizer = [ScriptBlock]::Create(($Initilizer -replace 'REPLACEME', $LogPath))
