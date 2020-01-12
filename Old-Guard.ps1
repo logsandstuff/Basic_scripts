@@ -154,6 +154,8 @@ function Old-Guard {
                $SMTPInfo.Send($ReportEmail)
                $SMTPInfo.Send($ReportEmail)
             }
+            
+            catch {}
              
 
             Start-Sleep -Milliseconds $PollingInterval
