@@ -1,7 +1,7 @@
 # Quick Usage Guide
 
 1) Flash the rubber ducky with Twin rubber ducky firmware.
-2) Copy the three files on this folder to the ducky (inject.bin, d.cmd, e.cmd, i.vbs). 
+2) Copy the three files on this folder to an SD card named "UO_2020" (inject.bin, d.cmd, e.cmd, i.vbs). 
     NOTE: encode your own inject.bin file if you're naming your usb something other than "UO_2020"
 3) Put loaded SD card back into the ducky & you're set.
 
