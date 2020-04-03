@@ -1,2 +1,2 @@
-# water-cage2
-Polar solvents are thought to form water-cage-like structures around nonpolar solutes.
+# Basic_scripts
+Compilation of new and reused scripts to for host recon, persistence, and exfiltration. Mostly written for PowerShell for deployment by an HID device.
