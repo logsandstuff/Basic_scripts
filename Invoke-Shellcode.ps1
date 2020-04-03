@@ -1,4 +1,5 @@
-#Borrowed script
+#From PowerShell Mafia
+
 
 function Invoke-Shellcode
 {
